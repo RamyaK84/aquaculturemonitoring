@@ -1,0 +1,120 @@
+✅ Step-by-Step Structure
+
+aquaculture-monitoring-simulated/
+├── README.md
+├── aquaculture_monitoring_simulation.ino
+├── sensor_dataset.csv
+├── wiring_diagram.png
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+📊 Sample Dataset (sensor_dataset.csv)
+
+This simulates sensor readings and results from the Arduino Serial Monitor:
+
+Timestamp,pH_Voltage,Turbidity,DO_Percent,Ammonia_Percent,Water_Level_cm,Water_Status,DO_Status,Ammonia_Status
+2025-05-21 10:00:00,2.45,400,12,25,25,Clean,Safe,Safe
+2025-05-21 10:01:00,1.70,550,10,35,15,Not Clean,Safe,Safe
+2025-05-21 10:02:00,3.10,300,18,60,30,Not Clean,High,High
+2025-05-21 10:03:00,2.20,450,4,10,8,Clean,Low,Safe
+2025-05-21 10:04:00,2.85,600,20,5,12,Not Clean,High,Safe
+
+
+Each row is a snapshot of the simulated data and system interpretation.
+
+       AquaCulture Monitoring System (Simulated)
+
+This project simulates a water quality monitoring system using *Arduino Uno* and *potentiometers* to represent different sensors. It reads analog values, processes them, and displays status messages about water quality through the *Serial Monitor*.
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+> 📁 Project Files
+
+- water_quality_simulation.ino — Main Arduino sketch that reads and interprets sensor data.
+- sensor_dataset.csv — Sample dataset of sensor readings with interpretations.
+- wiring_diagram.png — Visual guide for connecting potentiometers to Arduino.
+- README.md — Project documentation.
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+>Simulation Setup
+            Simulated Sensors
+
+| Parameter           | Simulated By   | Arduino Pin |
+|---------------------|----------------|-------------|
+| pH                  | Potentiometer  | A0          |
+| Turbidity           | Potentiometer  | A1          |
+| Dissolved Oxygen    | Potentiometer  | A2          |
+| Ammonia Level       | Potentiometer  | A5          |
+| Water Level         | Potentiometer  | A4          |
+
+Each potentiometer simulates a sensor and outputs a voltage (0–5V) which Arduino reads using analogRead().
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+> About aquaculture_monitoring_simulation.ino
+
+This Arduino code performs the following:
+
+1. *Reads analog inputs* from 5 potentiometers simulating:
+   - pH level
+   - Turbidity
+   - Dissolved Oxygen (DO)
+   - Ammonia concentration
+   - Water level
+
+2. *Converts values*:
+   - pH is calculated as voltage.
+   - DO and Ammonia are mapped to percentage (0–100%).
+   - Water level is mapped to a distance (cm).
+
+3. *Checks thresholds*:
+   - pH should be between *1.8V and 3.0V*.
+   - Turbidity below *500* (clean).
+   - DO should be *5–15%*.
+   - Ammonia should be *< 50%*.
+   - Water level should be *>10 cm*.
+
+4. *Displays conditions*:
+   - Clean/Not clean water
+   - Water level status (Full / Normal / Too Low)
+   - Safe/Unsafe DO and Ammonia levels
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+📄 README + Dataset Usage (in README.md)
+
+ 📊 Dataset
+
+This repository includes a sample dataset: sensor_dataset.csv.
+
+It contains simulated values for:
+- pH voltage
+- Turbidity
+- Dissolved Oxygen (%)
+- Ammonia (%)
+- Water level (cm)
+
+Each row also includes the interpreted water status based on thresholds used in the Arduino code.
+
+You can use this for testing, plotting graphs, or developing a machine learning model.
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ 
+🖼 Wiring Diagram Preview
+
+🔌 Wiring Summary
+
+Simulated Sensor	Arduino Analog Pin	Potentiometer Middle Pin
+pH Sensor	A0	Connect to A0
+Turbidity Sensor	A1	Connect to A1
+Dissolved Oxygen	A2	Connect to A2
+Water Level Sensor	A4	Connect to A4
+Ammonia Sensor	A5	Connect to A5
+
+Other Potentiometer Pins:
+
+One side to 5V
+
+One side to GND
