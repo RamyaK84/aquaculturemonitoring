@@ -1,0 +1,92 @@
+// Pin Definitions
+const int pHSensorPin = A0;           // Potentiometer simulating pH sensor
+const int turbiditySensorPin = A1;    // Potentiometer simulating turbidity sensor
+const int doSensorPin = A2;           // Potentiometer simulating DO sensor
+const int ammoniaSensorPin = A5;      // Potentiometer simulating ammonia sensor (NH3)
+
+// Thresholds
+const int TURBIDITY_THRESHOLD = 500;
+const float PH_LOW = 1.8;
+const float PH_HIGH = 3.0;
+const int LEVEL_FULL = 30;
+const int LEVEL_LOW = 10;
+const int AMMONIA_THRESHOLD_HIGH = 50; // High ammonia concentration threshold (adjust as needed)
+const int AMMONIA_THRESHOLD_LOW = 5;   // Low ammonia concentration threshold (safe)
+
+void setup() {
+  Serial.begin(9600);
+}
+
+void loop() {
+  // Read sensor values
+  int sensorValue_pH = analogRead(pHSensorPin);
+  int sensorValue_turbidity = analogRead(turbiditySensorPin);
+  int sensorValue_DO = analogRead(doSensorPin);  // Simulated DO sensor value
+  int sensorValue_ammonia = analogRead(ammoniaSensorPin); // Simulated ammonia sensor value
+
+  // Convert pH sensor value to voltage
+  float voltage_pH = sensorValue_pH * (5.0 / 1023.0);
+
+  // Simulate DO sensor value as a percentage (adjust according to your sensor)
+  float dissolvedOxygen = map(sensorValue_DO, 0, 1023, 0, 100);
+
+  // Simulate ammonia concentration as a percentage
+  float ammoniaConcentration = map(sensorValue_ammonia, 0, 1023, 0, 100);
+
+  // Simulate water level using a potentiometer (for ultrasonic sensor)
+  long distance = map(analogRead(A4), 0, 1023, 0, 50);  // Water level simulation (0-50 cm)
+
+  // Serial output for debugging
+  Serial.print("pH Voltage: ");
+  Serial.print(voltage_pH, 2);
+  Serial.print(" | Turbidity: ");
+  Serial.print(sensorValue_turbidity);
+  Serial.print(" | DO: ");
+  Serial.print(dissolvedOxygen);
+  Serial.print(" % | Ammonia: ");
+  Serial.print(ammoniaConcentration);
+  Serial.print(" % | Distance: ");
+  Serial.println(distance);
+
+  // Water quality condition checks
+  if (sensorValue_turbidity > TURBIDITY_THRESHOLD || voltage_pH < PH_LOW || voltage_pH > PH_HIGH) {
+    Serial.println("Water condition: Not clean");
+
+    if (voltage_pH < PH_LOW) {
+      Serial.println("Water pH is acidic");
+    } else if (voltage_pH > PH_HIGH) {
+      Serial.println("Water pH is alkaline");
+    }
+  } else {
+    Serial.println("Water is clean");
+  }
+
+  // Water level condition check
+  if (distance >= LEVEL_FULL) {
+    Serial.println("Water level: Full");
+  } else if (distance > LEVEL_LOW) {
+    Serial.println("Water level: Normal");
+  } else {
+    Serial.println("Water level: Too low");
+  }
+
+  // Check for safe DO levels (e.g., for aquatic life)
+  if (dissolvedOxygen < 5) {
+    Serial.println("Dissolved oxygen is low (below 5%)");
+  } else if (dissolvedOxygen > 15) {
+    Serial.println("Dissolved oxygen is high (above 15%)");
+  } else {
+    Serial.println("Dissolved oxygen is within safe range");
+  }
+
+  // Check for ammonia concentration levels
+  if (ammoniaConcentration > AMMONIA_THRESHOLD_HIGH) {
+    Serial.println("Ammonia concentration is too high (dangerous for aquatic life)!");
+  } else if (ammoniaConcentration < AMMONIA_THRESHOLD_LOW) {
+    Serial.println("Ammonia concentration is low (safe for aquatic life)");
+  } else {
+    Serial.println("Ammonia concentration is within safe range");
+  }
+
+  delay(1000);  // Delay for readability
+}
